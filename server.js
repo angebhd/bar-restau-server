@@ -1,8 +1,11 @@
 const express = require('express');
 const bodyParser = require('body-parser');
+const cors = require('cors'); ///cors librairy, allow cross origin request ressource sharing
 const app = express();
 const port = 3001; // You can change the port number to any available port you prefer
 
+// use of the librairy that allow CORS
+app.use(cors())
 // Define a basic route
 app.get('/', (req, res) => {
   res.send('Hello, Express!');
