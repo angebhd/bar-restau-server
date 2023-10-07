@@ -19,9 +19,7 @@ app.post('/api/submit-reservation', (req, res) => {
   const formData = req.body;
   console.log('Received data:', formData);
 
-  // Process the data and send a response
-  // You can save it to a database, perform validation, etc.
-
+ 
   res.status(200).json({ message: 'Data received successfully' });
 });
 
