@@ -1,29 +1,28 @@
+async function signin({ fullname, username, mail, password, role }) {
+    const mongoose = require('mongoose');
+    mongoose.connect("mongodb://localhost:27017/bar-restau")
 
-function saveReservation(rData) {
 
-    const mongoose = require('mongoose')
-    mongoose.connect('mongodb://localhost:27017/bar-restau', { useNewUrlParser: true })
-///                             hostname or IP/ database name
-    const reservationSchema = new mongoose.Schema({
-        name: String,
-        table: Number,
-        time: Date,
-    })
+    const db = mongoose.connection;
+    db.on('error', console.error.bind(console, 'connection error:'));
+    db.once('open', () => {
+        console.log('Connected to MongoDB');
+    });
 
-    const reservationModel = mongoose.model('reservationModel', reservationSchema, 'reservations') 
-    ///    model                                model           schema               collection in db
+    const logFormSchema = new mongoose.Schema({
+        fullname: String,
+        username: String,
+        mail: String,
+        password: String,
+        role: Number
+    });
 
-    const reservationData = new reservationModel({
-        name: rData.name,
-        table: parseInt(rData.table),
-        time: new Date(rData.time),
-    })
+    const users = new mongoose.model('users', logFormSchema);
 
-    reservationData.save()
-        .then((result)=>{
-            console.log('Data saved successfully', result);
-            mongoose.connection.close()
-        })
+    const user = new users({ fullname, username, mail, password, role });
+    await user.save();
+    console.log("User saved successfully");
+
 }
+module.exports = { signin };
 
-module.exports = saveReservation;

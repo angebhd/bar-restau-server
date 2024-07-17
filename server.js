@@ -1,37 +1,34 @@
 const express = require('express');
 const bodyParser = require('body-parser');
-const cors = require('cors'); ///cors librairy, allow cross origin request ressource sharing
 const app = express();
 
-////////////////////////////////////////////////////////////////
-const saveReservation = require('./database')
-///////////////////
+///// Local functions --------------------------------
+const { userSignin } = require('./contollers/userSignin');
+const { userLogin } = require('./contollers/userLogin');
 
-const port = 3001; // You can change the port number to any available port you prefer
-
-// use of the librairy that allow CORS
-app.use(cors())
-// Define a basic route
-app.get('/', (req, res) => {
-  res.send('Hello, Express!');
-});
-
-// Middleware to parse JSON data
+app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
-// Route to handle form data submission
-app.post('/api/submit-reservation', (req, res) => {
-  const formData = req.body;
-  console.log('Received data:', formData);
-  //////dataase
-  saveReservation(formData)
-  ////db
+// Login handling
+app.post("/login", (req, res) => {
+  const { username, password } = req.body;
+  userLogin({ username, password });
+  // res.redirect("http://localhost:3000");
+  res.end();
+})
 
-  res.status(200).json({ message: 'Data received successfully' });
-});
+//Signin handling
 
+app.post("/signin", (req, res) => {
+  const { fullname, username, mail, password } = req.body;
+  const role = 0;
+  userSignin({ fullname, username, mail, password, role });
+  res.redirect("http://localhost:3000/login");
 
-// Start the server
+  res.end();
+})
+
+const port = 3001;
 app.listen(port, () => {
-  console.log(`Server is running on http://localhost:${port}`);
+  console.log("Server running")
 });
