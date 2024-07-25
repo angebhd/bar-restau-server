@@ -1,21 +1,13 @@
 const mongoose = require('mongoose');
-mongoose.connect("mongodb://localhost:27017/bar-restau")
 
-
-const db = mongoose.connection;
-db.on('error', console.error.bind(console, 'connection error:'));
-db.once('open', () => {
-    console.log('Connected to MongoDB');
+const userSchema = new mongoose.Schema({
+    fullname: { type: String, required: true, unique: true },
+    username: { type: String, required: true },
+    mail: { type: String, required: true },
+    password: { type: String, required: true },
+    role: { type: Number, required: true }
 });
 
-const logFormSchema = new mongoose.Schema({
-    fullname: String,
-    username: String,
-    mail: String,
-    password: String,
-    role: Number
-});
-
-const users = new mongoose.model('users', logFormSchema);
+const users = new mongoose.model('users', userSchema);
 
 module.exports = { users }
