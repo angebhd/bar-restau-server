@@ -11,9 +11,10 @@ require('./config/dbconnection')
 
 ///// Local functions --------------------------------
 const { userAuth, userData } = require('./controllers/user');
-const {tables} = require('./controllers/tables');
+const { tables } = require('./controllers/tables');
+const { reservations } = require('./controllers/reservations');
 // Middlewares
-const { authenticateToken} = require('./middleware/userAuth');
+const { authenticateToken } = require('./middleware/userAuth');
 
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cookieParser());
@@ -57,14 +58,23 @@ app.get('/details', (req, res) => {
 
 ///////// GET USERS DATAS
 
-app.get('/getUsername', authenticateToken ,async(req, res) => {
+app.get('/getUsername', authenticateToken, async (req, res) => {
   await userData.getUsername(req, res);
 })
 
 ///////// TABLES
-app.get('/api/getTables', async(req, res) => {
+app.get('/api/getTables', async (req, res) => {
   await tables.getTables(req, res);
 });
+
+
+////////Reservations
+app.post('/api/reservation/make', authenticateToken, async (req, res) => {
+  await reservations.make(req, res);
+})
+app.post('/api/reservation/checkConflicts', authenticateToken, async (req, res) => {
+  await reservations.checkConflict(req, res);
+})
 
 const port = 3001;
 app.listen(port, () => {
