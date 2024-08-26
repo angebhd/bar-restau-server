@@ -1,7 +1,5 @@
 const { tableModel } = require('../models/tables');
-const bcrypt = require('bcryptjs');
-const jwt = require('jsonwebtoken');
-const SECRET_KEY = "ange";
+
 
 
 

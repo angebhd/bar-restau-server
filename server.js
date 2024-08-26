@@ -13,6 +13,7 @@ require('./config/dbconnection')
 const { userAuth, userData } = require('./controllers/user');
 const { tables } = require('./controllers/tables');
 const { reservations } = require('./controllers/reservations');
+const { menu } = require('./controllers/menu');
 // Middlewares
 const { authenticateToken } = require('./middleware/userAuth');
 
@@ -75,6 +76,17 @@ app.post('/api/reservation/make', authenticateToken, async (req, res) => {
 app.post('/api/reservation/checkConflicts', authenticateToken, async (req, res) => {
   await reservations.checkConflict(req, res);
 })
+
+////menu
+app.get('/api/menu/food', async (req, res) => {
+  await menu.getFood(res);
+});
+app.get('/api/menu/drink', async (req, res) => {
+  await menu.getDrink(res);
+});
+app.get('/api/menu/all', async (req, res) => {
+  await menu.getAll(res);
+});
 
 const port = 3001;
 app.listen(port, () => {
