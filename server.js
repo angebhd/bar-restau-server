@@ -14,6 +14,7 @@ const { userAuth, userData } = require('./controllers/user');
 const { tables } = require('./controllers/tables');
 const { reservations } = require('./controllers/reservations');
 const { menu } = require('./controllers/menu');
+const { orders } = require('./controllers/orders');
 // Middlewares
 const { authenticateToken } = require('./middleware/userAuth');
 
@@ -87,6 +88,12 @@ app.get('/api/menu/drink', async (req, res) => {
 app.get('/api/menu/all', async (req, res) => {
   await menu.getAll(res);
 });
+
+////Orders
+
+app.post('/api/order/make', authenticateToken, async (req, res) =>{
+  await orders.make(req, res);
+})
 
 const port = 3001;
 app.listen(port, () => {
