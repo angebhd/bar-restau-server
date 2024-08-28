@@ -13,7 +13,7 @@ const orders = {
         const customerId = req.tokenDecoded.id;
         const items = req.body.items;
         const totalAmount = req.body.totalAmount
-        //// should validate the price from te databases, cause we can't trust what come from the user
+        //// should validate the price from te databases, cause we can't trust what come from the user///////////
         // const status = null
         // const orderDate = null;
         // const deliveryDateTime = null;
@@ -30,6 +30,21 @@ const orders = {
         }
 
     },
+    get: async (req, res) => {
+        // const userId = new mongoose.Types.ObjectId(req.tokenDecoded.id)
+
+        try {
+            const op = await orderModel.find({ customerId: req.tokenDecoded.id }).populate({path: 'customerId', select: 'fullname mail'}).populate('items.id')
+            console.log(op);
+            
+            res.status(200).send(op);
+        } catch (error) {
+            res.status(200).send({ message: 'Something went wrong', error: true });
+            console.log(error);
+        }
+
+
+    }
 }
 
 

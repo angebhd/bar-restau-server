@@ -43,20 +43,9 @@ app.post("/signin", async (req, res) => {
 })
 // logout handling
 app.get('/logout', function (req, res) {
-  req.session.destroy((err) => {
-    if (err) {
-      return res.status(500).send(err);
-    }
-    res.redirect("http://localhost:3000/login");
-  });
+  userAuth.logout(res);
 });
 
-app.get('/details', (req, res) => {
-  console.log(req);
-  console.log('\n');
-  res.end()
-
-})
 
 ///////// GET USERS DATAS
 
@@ -71,11 +60,15 @@ app.get('/api/getTables', async (req, res) => {
 
 
 ////////Reservations
-app.post('/api/reservation/make', authenticateToken, async (req, res) => {
+app.post('/api/reservation', authenticateToken, async (req, res) => {
   await reservations.make(req, res);
 })
 app.post('/api/reservation/checkConflicts', authenticateToken, async (req, res) => {
   await reservations.checkConflict(req, res);
+})
+app.get('/api/reservation', authenticateToken, async (req, res) => {
+  await reservations.get(req, res)
+
 })
 
 ////menu
@@ -91,9 +84,14 @@ app.get('/api/menu/all', async (req, res) => {
 
 ////Orders
 
-app.post('/api/order/make', authenticateToken, async (req, res) =>{
+app.post('/api/order', authenticateToken, async (req, res) => {
   await orders.make(req, res);
 })
+app.get('/api/order', authenticateToken, async (req, res) => {
+  await orders.get(req, res)
+
+})
+
 
 const port = 3001;
 app.listen(port, () => {

@@ -41,14 +41,29 @@ const userAuth = {
             console.log(`user ${username} not found`);
             res.status(401).send(`user ${username} not found`);
         }
+    },
+    logout: (res) => {
+        try {
+            res.cookie('token', '', {
+                httpOnly: true,
+                sameSite: 'Strict',
+                maxAge: 0
+            });
+            res.status(200).send('Logged out successfully');  
+        } catch (error) {
+            res.status(200).send({message: 'Something went wrong', error:true});
+            console.log(error);
+            
+            
+        }
+       
     }
-
 
 }
 
 const userData = {
-    getUsername : async (req, res) =>{
-        const user = await users.findOne({_id: req.tokenDecoded.id})
+    getUsername: async (req, res) => {
+        const user = await users.findOne({ _id: req.tokenDecoded.id })
         res.status(200).send(user.username);
     },
 
